@@ -58,4 +58,4 @@ INSER PICTURE HERE !!!
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Licensed under the [MIT License](LICENSE).
