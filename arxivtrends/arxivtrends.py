@@ -13,25 +13,14 @@ url_tail = '&max_results=10000'
 #TODO choose how many MSCs and which one
 
 
+"""
+A class to set a specific math field, send a request through the arXiv API and
+store the xml response.
 
+The response format is in Atom 1.0, a lightweight and commonly used
+xml-based format that is human readable. To parse this xml we use feedparser.
+"""
 class Scraper(object):
-    """
-    A class to specify the parameters of the scraping: a macrofield, the waiting
-    time between subsequent calls to API, triggered by Error 503 (t), the timeout in
-    seconds after which the scraping stops (default: 300s) and current date & time.
-
-    Example:
-    Returning all eprints from
-
-    ```
-        import arxivscraper.arxivscraper as ax
-        scraper = ax.Scraper(macro_field='Harmonic Analysis', t=30, timeout=300)
-        output = scraper.scrape()
-    ```
-    output is a df to which the graphical functions are to be applied. But scrape()
-    also save a csv file with the same information as output, so we can get the
-    same graphical results after the execution of the program ends.
-    """
 
     def __init__(self, macro_field):
 
@@ -55,6 +44,18 @@ class Scraper(object):
 
 
 
+
+"""
+The scrape method parses the feed we obtain from our request. For each preprint,
+we want to retain its submision year, the list of its authors and the number of
+pages of its PDF version. In case one of these data is not available, as it is
+almost always the case with preprints that have been withdrawn, the code for that
+iteration is simply skipped.
+
+When the parsing is complete, the cleaned data are saved into both a pandas
+DataFrame and a .csv file whose name contains the research field
+and current month & year.
+"""
     def scrape(self):
 
         years = []
@@ -91,9 +92,9 @@ class Scraper(object):
         t1 = time.time()
 
         records = pd.DataFrame({'years':years, 'authors':authors, 'pages': pages})
-        query_details = get_details(macro_field)
-        this.name_file = 'arXivQuery_' + query_details + '.csv'
-        records.to_csv(this.name_file,  sep='\t', index = None, header=False)
+        query_details = get_details(self.field)
+        self.name_file = 'Arxivtrends__' + query_details + '.csv'
+        records.to_csv(self.name_file,  sep='\t', index = None, header=False)
 
         total_time = t1 - t0
         print('fetching is completed in ' + str(datetime.timedelta(seconds = x)) + ' hours.')
@@ -102,7 +103,9 @@ class Scraper(object):
         return records
 
 
-
+"""
+Getters
+"""
     def getUrl(self):
         return self.url
 
@@ -110,4 +113,4 @@ class Scraper(object):
         return self.field
 
     def getNameFile(self):
-        return this.name_file
+        return self.name_file

@@ -1,0 +1,60 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1040{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang16\f0\fs44 Presentation of the project: I'll find a suitable title\par
+\fs22\par
+Nowadays many data scientist have graduate degrees in hard science subjects such as mathematics, physics, computer science, biology, and for very few of them the option of an academic career has been out of question since the onset of their studies. Even a quick google search on the topic will show tons of blog posts, magazine columns and statistics about the massive, ever-mounting flow of people - not only graduates - from academia to, say, the tech industry. The motivations adduced for what is still for many a career change, besides the undeniably wide gulf between both average retribution and career advancement rates in the two sectors, revolve around a range of increasingly remarked-upon concerns about the current academic system. For example the increase of the average number of candidates for postdoc positions - still absolutely necessary to start climbing the academic ladder - and the downward projection of future tenure track positions openings. As a 2018 UBC graduate in mathematics I can vouch for the veracity of this state of things and add other reasons for having to consider an academic career now as a less convenient option compared to just 10 or 15 years ago:\par
+1) the hyper-competitiveness of the modern academic selection & recruitment system;\par
+2) the consequent precocious hyper-specialization young researchers are forced to undergo.\par
+Both PhD candidates in the disciplines I mentioned and more experienced professors who are - or have been - members of recruitment boards of universities and research institution can easily confirm: if you earn your PhD with only one or two publication on your behalf, you're not exactly killing it out there... There is just going to be plenty of candidates for the postdocs you are interested in, fresh off their doctoral studies and with 4, 5 or more preprints on the arxiv. Given that modern academia exists only in 'publish or perish' mode, these candidates are inevitably going to have the upper hand. Therefore, in order to roll up a good initial capital of papers to invest in the academic market, the best strategy is to churn out narrow results on as many niche subjects as possible, more mainstream subjects being notoriously tougher (it's difficult to say something new and meaningful on a problem that has already been studied by many experienced researchers!).\par
+\par
+"But that's just how competition works, it's just the way of it!", the well-known and well-established line of thinking goes. Nevertheless, some voices from within the research world have already expressed a well thought-through criticism towards the current system. Some have openly decried the emphasis on meeting prescribed numerical standards in terms of publications rather than contributing to the long-term advancement of research by means of a deeper and more slowly-matured perspective.\par
+\par
+I totally espouse this concerns out of familiarity with the modern academic system. My interest for this topic and desire to explore it more broadly, beyond the boundaries of my own experience and the anecdotical at-one-remove one I gathered from collegues and friends, is what led me to this small data science project. \par
+\par
+\fs44 Assumptions, strategy, methods\par
+\fs22\par
+My goal was first to find some quantitative indicator of hyper-specialization in the research fields I am most familiar with, then verify whether some increase trend in that sense could be detectable. Moreover I needed a reliable data source, that is reasonably apt to help me explore the phenomenon.\par
+\par
+The choice of my data source - namely, the arxiv - came as somewhat natural. Arxiv is the most famous worldwide repository of electronic preprints in mathematics and its records in the research fields of my concern span nearly thirty years. Having been an absolutely mainstream tool for at least 20 years, I could consider the assumption of statistical representativeness of its data not unreasonable.\par
+\par
+As to the quantitative variables to study, I considered the number of authors per preprint and the mean number of both preprint pages and authors per year. The number of authors of a preprint, in particular, can be regarded to a certain degree as reflective of the level of specialization of the content of the preprint. Each author of a paper contributes to its scientific results by means of his own specific expertise, which the other authors employed and combined with their own to write the paper. The working hypothesis is then: the more authors, the higher the likelihood for the reader to need a specialized background in advanced mathematics to be able to understand the preprint. In this project we'll analyze these numerical indicators for selected research fields and analyze their trends over the past three decades of research in mathematics.\par
+\par
+The rest of this notebook is dedicated to showing a complete example of use of the package for the extraction and visualization of the data relative to one of the research fields currently available. For example, ...\par
+\par
+\fs44 An example of use of Arxivtrends\par
+\fs22\par
+As outlined in the README file, let's first create an instance of the class ```Scraper``` for the research field we chose:\par
+\par
+cell\par
+\par
+The instance ```scraper``` receives the results returned from a call to the arXiv api that is specific for the research field we chose. Now we are ready to parse ```scraper```  and extract the information we want for each preprint: year of publication, list of authors and number of pages.\par
+\par
+cell\par
+\par
+Now that the parsing is complete, we have a pandas DataFrame ```df``` containing our data cleaned and ready to be used for visualization and statistical analysis.\par
+Remark: the parsing took several hours because the arXiv API's terms of use (link) sets limits on the requests rate (in particular, no more than one request every three seconds, limited to a single connection at a time.) and explicitly asks not to overcome these limits. \par
+Finally we can get some visual insights from the data we collected and cleaned! For example, let's see the number of arXiv preprints in ... with at least three authors.\par
+\par
+cell\par
+\par
+Now, if we keep in mind that\par
+1) modern theoretical mathematics in general - and the research fields we are concerned with in particular - are split into a myriad of areas, problems, theories, subfields and sub-subfields; \par
+2) the norm is preprints with one author or two authors;\par
+a collaboration of three or more researchers implies a multiple overlap of competences and connotes an appreciable level of specialization.\par
+Let's see the number of arXiv preprints in ... with at least four authors.\par
+\par
+cell\par
+\par
+The trends clearly match and seem to suggest a steady increase of both the degree of collaboration among researchers and the level of interconnectedness of their areas of competence. Of course this conclusion will came as no surprise to any competent mathematician, the unity of mathematics as a whole having been repeatedly proven by the emergence of many deep and important connections among its various branches over the past centuries and until now. But it's not necessarily good news for the beginner, whose career decision may well be considerably influenced by the uphill climb ahead to master even just one area of research.\par
+Let's take a look at the mean number of authors and mean number of pages for this research field:  \par
+\par
+cell \par
+\par
+One one hand, there is a clearly discernible growth for the mean number of authors (though the values remain quite close to 1 due to the single-authored preprints majority). On the other hand, the mean number of pages does not seem to increase at all but rather to oscillate between 20 and 30 pages. With no difference whatsoever between, say, the decades 2000-209 and 2010-2019. This fact suggests that, regardless of the aforementioned surge in research collaboration and research areas interconnection, preprints have not become longer than how they were on average 10 or 20 years ago.\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 

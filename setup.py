@@ -1,17 +1,12 @@
 """\
-Provides a python package to get data of academic papers
-posted at arXiv.org in a specific date range and category.
+Python package to get data about arXiv preprints in certain math
+research fields and study some trends in hyper-specialization and growth rate
+increase of scientific production in those fields.
 
-Collected data:
-
-        Title,
-        ID,
-        Authors,
-        Abstract,
-        Subcategories,
-        DOI,
-        Created (date),
-        Updated (date)
+Collected data for each preprint:
+    year,
+    authors,
+    number of pages (PDF format).
 """
 
 import sys
@@ -19,27 +14,22 @@ try:
     from setuptools import setup, find_packages
 except ImportError:
     sys.exit("""Error: Setuptools is required for installation.
- -> http://pypi.python.org/pypi/setuptools""")
+    -> http://pypi.python.org/pypi/setuptools""")
 
 setup(
-    name = "arxivscraper",
-    version = "0.0.3",
-    description = "Get arXiv.org metadate within a date range and category",
-    author = "Mahdi Sadjadi",
-    author_email = "sadjadi.seyedmahdi@gmail.com",
-    url = "https://github.com/Mahdisadjadi/arxivscraper",
-    download_url = 'https://github.com/Mahdisadjadi/arxivscraper/archive/0.0.2.tar.gz',
+    name = "Arxivtrends",
+    version = "0.0.1",
+    description = "An ArXiV scraper to retrieve records from given research areas in mathematics and detect some trends in hyper-specialization and growth rate increase of scientific production in those fields.",
+    author = "Alessandro Marinelli",
+    author_email = "alessandromarinelli7@gmail.com",
+    url = "https://github.com/amarine7/Arxivtrends",
+    #download_url = "",
     py_modules = [""],
     packages=find_packages(),
-    keywords = ["arxiv", "scraper", "api", "citation"],
+    keywords = ["hyper-specialization", "scraper", "api", "arXiv"],
     license = "MIT",
-    classifiers = [
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
+    classifiers = ["Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Science/Research",
-        "Topic :: Text Processing :: Markup :: LaTeX",
-        ],
+        "Development Status :: 1 - Production/Stable",
+        "Intended Audience :: Science/Research"],
 )
