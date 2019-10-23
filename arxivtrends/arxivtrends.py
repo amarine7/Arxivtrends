@@ -26,7 +26,7 @@ class Scraper(object):
 
         try:
             self.url = url_base + url_query(macro_field) + url_tail
-        except Exception:
+        except ValueError:
             print("Error!")
             print("Research field not valid!")
         else:

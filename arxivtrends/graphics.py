@@ -20,6 +20,8 @@ the scrape method saves the lists of authors of the parsed preprints as strings
 in the .csv file once the parsing loop is complete. When we load the data from
 the file, we need to turn these strings back into lists of authors. The
 string_to_list method splits these strings and removes the bracket characters.
+A not None test is unnecessary: all the strings loaded from the file that
+scrape() creates have the form '[...]'.
 """
 def string_to_list(string):
     return string.strip('[').strip(']').split(',')
@@ -75,9 +77,9 @@ def plot_N_authors_papers(df, N):
     bucket_size = 0.8
     plt.bar(histogram.keys(), histogram.values(), bucket_size, align='center', edgecolor='black')
     plt.xlabel('years')
-    plt.ylabel('papers')
+    plt.ylabel('preprints')
     plt.grid(True)
-    list_indexes = np.arange(df2['years'].min(), 2020, 1)
+    list_indexes = np.arange(df2['years'].min(), df2['years'].max(), 1)
     list_labels = [str(year) for year in list_indexes]
     plt.xticks(ticks=list_indexes, labels=list_labels, rotation=50)
     plt.title('Preprints in ' + df.index.names[0] + ' by ' + str(N) ' or more authors')
@@ -116,33 +118,46 @@ def mean_authors_vs_pages(df):
 
 
 
-def average_productivity():
-    pass
-
-    #Select the year from which to count, then for each author who started publishing
-    #in that year  consider the number of papers published every year. Then, for
-    #each year, calculate the average of that value
-
-    #Use update to append set with an iterable: a.update([3,4])
+def find_pool_authors(df):
+    authors_pool = set()
+    for authors in df['authors']:
+        authors_pool.update(authors)
+    return authors_pool
 
 
 
+#change the iteration over df, see
+# https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas
+# [x['field'] for x in df] is wrong it causes the error string indices must be integers
+def get_productivity_database(df):
+    authors_pool = find_pool_authors(df)
+    preprints = 0
+    authors_df = pd.DataFrame([], columns = ['author' , 'year', '#preprints'])
+    for author in authors_pool:
+        for year in range(df['years'].min(), df['years'].max()):
+            preprints = 0
+            for record in df:
+                if author in record['authors'] and year == record['years']:
+                    preprints+=
+            authors_df = authors_df.append({'author':author , 'year':year, '#preprints':preprints}, ignore_index=True)
+    return authors_df
 
 
 
 
-#Per aggiungere le spiegazioni alle celle di codice jn, seleziona altre celle
-#come markdown: #Cell -> Cell Type
 
-#! + command in jn is like a command given from cmd line
+def average_productivity(authors_df, year):
+    filtered_df = authors_df.drop(authors_df[authors_df['#preprints'] == 0].index)
+    filtered_df = filtered_df.groupby('author').filter(lambda x:x['year'].min() == year)
+    filtered_df = filtered_df.groupby('year')['#preprints'].mean()
 
-
-#in the ipynb file usare %matplotlib inline per far vedere le immagini, ma dire che è meglio
-#usare %matplotlib qt. For other fields, just save the pictures you get this last way
-
-
-
-
-#for quartiles:
-    #df2 = df.groupby('years')['#authors'].describe()
-    #df3 = df2[['mean', '25%', '50%', '75%']]
+    plt.rcParams['figure.figsize'] = [20, 8]
+    plt.plot(filtered_df['year'], filtered_df['#preprints'], marker='o', linewidth=1)
+    plt.xlabel('years')
+    plt.ylabel('preprints')
+    plt.grid(True)
+    list_indexes = np.arange(year, filtered_df['years'].max(), 1)
+    list_labels = [str(year) for year in filtered_df['year']]
+    plt.xticks(ticks=list_indexes, labels=list_labels, rotation=50)
+    plt.title('Average research production from authors whose first preprint was submitted in ' + str(year) + '.')
+    #plt.show()

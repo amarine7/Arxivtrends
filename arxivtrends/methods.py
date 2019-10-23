@@ -9,10 +9,10 @@ import numpy as np
 
 
 macro_fields = {
-    'Partial differential equations of elliptic type':['35J05', '35J10', '35J15', '35J20', '35J25', '35J30', '35J35', '35J40', '35J45', '35J50', '35J55', '35J60', '35J65', '35J67', '35J70', '35J85'],
-    'Harmonic analysis on Euclidean spaces':['42A05', '42A10', '42A15', '42A16', '42A20', '42A24', '42A32', '42A38', '42A45', '42A50', '42A55', '42A61', '42A63', '42A65', '42A70', '42A75', '42A82', '42A85', '42B05', '42B08', '42B10', '42B15', '42B20', '42B25', '42B30', '42B35', '42C10', '42C15', '42C20', '42C25', '42C30', '42C40'],
-    'Abstract harmonic analysis':['43A05', '43A07', '43A10', '43A15', '43A17', '43A20', '43A22', '43A25', '43A30', '43A32', '43A35', '43A40', '43A45', '43A46', '43A50', '43A55', '43A60', '43A62', '43A65', '43A70', '43A75', '43A77', '43A80', '43A85', '43A90'],
-    'Partial differential equations of fluid mechanics': ['76A02','76A05','76A10','76A15','76A20','76A25','76A99','76B03','76B07','76B10','76B15','76B20','76B25','76B45','76B47','76B55','76B60','76B65','76B70','76D03','76D05','76D06','76D07','76D08','76D09','76D10','76D17','76D25','76D27','76D33','76D45','76D50','76D55','76E05','76E06','76E07','76E09','76E15','76E17','76E19','76E20','76E25','76E30','76E99','76Fxx','76F02','76F05','76F06','76F10','76F20','76F25','76F30','76F35','76F40','76F45','76F50','76F55','76F60','76F65','76F70','76F99','76G25]','76H05','76J20','76K05','76L05','76M10','76M12','76M15','76M20','76M22','76M23','76M25','76M27','76M28','76M30','76M35','76M40','76M45','76M50','76M55','76M60','76N10','76N15','76N17','76N20','76N25','76N99','76P05','76Q05','76Rxx','76R05','76R10','76R50', '76S05']
+    'Elliptic PDE':['35J05', '35J10', '35J15', '35J20', '35J25', '35J30', '35J35', '35J40', '35J45', '35J50', '35J55', '35J60', '35J65', '35J67', '35J70', '35J85'],
+    'Fourier Analysis':['42A05', '42A10', '42A15', '42A16', '42A20', '42A24', '42A32', '42A38', '42A45', '42A50', '42A55', '42A61', '42A63', '42A65', '42A70', '42A75', '42A82', '42A85', '42B05', '42B08', '42B10', '42B15', '42B20', '42B25', '42B30', '42B35', '42C10', '42C15', '42C20', '42C25', '42C30', '42C40'],
+    'Abstract Fourier analysis':['43A05', '43A07', '43A10', '43A15', '43A17', '43A20', '43A22', '43A25', '43A30', '43A32', '43A35', '43A40', '43A45', '43A46', '43A50', '43A55', '43A60', '43A62', '43A65', '43A70', '43A75', '43A77', '43A80', '43A85', '43A90'],
+    'Fluid Mechanics PDE': ['76A02','76A05','76A10','76A15','76A20','76A25','76A99','76B03','76B07','76B10','76B15','76B20','76B25','76B45','76B47','76B55','76B60','76B65','76B70','76D03','76D05','76D06','76D07','76D08','76D09','76D10','76D17','76D25','76D27','76D33','76D45','76D50','76D55','76E05','76E06','76E07','76E09','76E15','76E17','76E19','76E20','76E25','76E30','76E99','76Fxx','76F02','76F05','76F06','76F10','76F20','76F25','76F30','76F35','76F40','76F45','76F50','76F55','76F60','76F65','76F70','76F99','76G25]','76H05','76J20','76K05','76L05','76M10','76M12','76M15','76M20','76M22','76M23','76M25','76M27','76M28','76M30','76M35','76M40','76M45','76M50','76M55','76M60','76N10','76N15','76N17','76N20','76N25','76N99','76P05','76Q05','76Rxx','76R05','76R10','76R50', '76S05']
 }
 
 
@@ -32,17 +32,18 @@ def url_query(macro_field):
             list[0] = list[0] + '+OR+all:' + subfield
         return 'all:' + list[0]
     else:
-        raise
+        raise ValueError
 
 
 
 
 """
 The get_authors method extracts the names of the authors of a preprint from the
-content of the correspondent post-query-response xml tag.
+content of the correspondent post-query-response xml tag. A test on the validity
+of the parameter authors as a nonempty list is included.
 """
 def get_authors(authors):
-    if len(authors) == 0:
+    if authors == None or len(authors) == 0:
         return None
     else:
         list_authors = [];
@@ -63,20 +64,24 @@ order of frequency, which is reflected in the nesting of the if/else statements)
 When the number of pages of the preprint is missing or not identifiable in the
 aforementioned tags's content, the method pages_from_url is called.
 """
+
+PREPRINT_COMMENT = 'arxiv_comment'
+PREPRINT_JOURNAL_REFERENCE = 'arxiv_journal_ref'
+
 def get_num_pages(record, i):
-    if record.get('arxiv_comment') == None:
-        if record.get('arxiv_journal_ref') == None:
+    if record.get(PREPRINT_COMMENT) == None:
+        if record.get(PREPRINT_JOURNAL_REFERENCE) == None:
             return pages_from_url(record, i)
         else:
             return pages_from_journal(record)
     else:
-        pages = find_match(0, record.get('arxiv_comment'))
+        pages = find_match(0, record.get(PREPRINT_COMMENT))
         if pages == None:
             pages = pages_from_journal(record)
             if pages == None:
-                pages = find_match(1, record.get('arxiv_comment'))
+                pages = find_match(1, record.get(PREPRINT_COMMENT))
                 if pages == None:
-                    pages = find_match(2, record.get('arxiv_comment'))
+                    pages = find_match(2, record.get(PREPRINT_COMMENT))
                     if pages == None:
                         pages = pages_from_url(record, i)
     return pages
@@ -93,11 +98,11 @@ possible to detect this patern and the number of pages of the paper is simply
 the difference between the number on the right and the one on the left.
 """
 def pages_from_journal(record):
-    if record.get('arxiv_journal_ref') == None:
+    if record.get(PREPRINT_JOURNAL_REFERENCE) == None:
         return None
     else:
         pattern = re.compile(r'(.\d\d-\d\d.|\d\d-\d\d|.\d\d-\d\d\d|\d\d\d\d-\d\d\d\d)')
-        matches = pattern.findall(record.get('arxiv_journal_ref'))
+        matches = pattern.findall(record.get(PREPRINT_JOURNAL_REFERENCE))
         if len(matches) == 1 and len(re.findall(r'\d+', matches[0])) == 2:
             pages = int(re.findall(r'\d+', matches[0])[1]) - int(re.findall(r'\d+', matches[0])[0])
         else:
@@ -163,18 +168,21 @@ If the PDf link is not active - typically when the preprint was withdrawn -
 pages_from_url returns None.
 """
 def pages_from_url(record, i):
-    url = pdf_url(record.get('id'))
-    try:
-        time.sleep(np.max([i%7, 3]))
-        link = urllib.request.urlopen(url)
-        content=link.read()
-        memoryFile = BytesIO(content)
-        pdfFile = PdfFileReader(memoryFile)
-        return pdfFile.getNumPages()
-    except PdfReadError:
+    if record.get('id') == None:
         return None
-    except urllib.error.HTTPError:
-        return None
+    else:
+        url = pdf_url(record.get('id'))
+        try:
+            time.sleep(np.max([i%7, 3]))
+            link = urllib.request.urlopen(url)
+            content=link.read()
+            memoryFile = BytesIO(content)
+            pdfFile = PdfFileReader(memoryFile)
+            return pdfFile.getNumPages()
+        except PdfReadError:
+            return None
+        except urllib.error.HTTPError:
+            return None
 
 
 
