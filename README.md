@@ -25,15 +25,15 @@ $ pip install arxivtrends --upgrade
 
 ## Examples
 Let's import ```arxivtrends``` and create a scraper to fetch all preprints in
-Fourier analysis (for other fields see below):
+Partial differential equations of elliptic type (for other fields see below):
 
 ```python
 import arxivtrends
-scraper = arxivtrends.Scraper(macro_field='Partial differential equations of elliptic type')
+scraper = arxivtrends.Scraper(macro_field='Elliptic PDE')
 ```
 
 The instantiation of the class ```Scraper``` with the parameter ```macro_field```
-set to 'Partial differential equations of elliptic type' returns a dictionary-like
+set to 'Elliptic PDE' returns a dictionary-like
 object containing all the information (authors, title, submission date, etc.)
 about the arXiv preprints whose [Mathematics Subject Classification (MSC)](https://cran.r-project.org/web/classifications/MSC-2010.html) falls under the category Partial differential
 equations of elliptic type.
@@ -57,22 +57,23 @@ Total number of papers scraped: 200
 Finally the extracted information is saved both into the pandas DataFrame ```output_df```
 and into a ```.csv``` file. The latter option may be useful in case of overnight
 running and kernel shutdown after a certain time of inactivity, as the parsing
-process may last up to a few hours (see the script ```arxivtrends.py```).
+process may last up to a few hours (see the script ```arxivtrends.py``` or the file ```Project Presentation.ipynb```).
 
 Once the parsing is complete, we can call the data visualization methods (see the
-  script ```graphics.py```) and see what the data can tell us. For example, the
-  below call to the method ```plot_N_authors_papers()``` shows the number of
-  uploaded arXiv preprints with at least 3 authors, year by year:
+script ```graphics.py```) and see what the data can tell us. For example, the
+below call to the method ```plot_N_authors_papers()``` shows the number of
+uploaded arXiv preprints with at least 3 authors, year by year:
 
 ```python
 plot_N_authors_papers(output_df, 3)
 ```
 ![picture](PDE.png)
 
+For a complete walk-through of the package, see the ```Project Presentation.ipynb``` file.
 
 ## Research Areas
 Currently available option for the parameter ```macro_field```:
-```Harmonic analysis on Euclidean spaces``` (MSC codes: 42A05 - 42C40), ```Abstract harmonic analysis``` (MSC codes: 43A05 - 43A90), ```Partial differential equations of elliptic type``` (MSC codes: 35J05 - 35J85), ```Partial differential equations of fluid mechanics``` (MSC codes: 76A02 - 76S05).
+```Fourier Analysis``` (MSC codes: 42A05 - 42C40), ```Abstract Fourier Analysis``` (MSC codes: 43A05 - 43A90), ```Elliptic PDE``` (MSC codes: 35J05 - 35J85), ```Fluid Mechanics PDE``` (MSC codes: 76A02 - 76S05).
 
 
 ## License
