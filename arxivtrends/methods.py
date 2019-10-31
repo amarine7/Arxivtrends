@@ -1,7 +1,6 @@
 import re
 import urllib
-from PyPDF2 import PdfFileReader
-from PyPDF2.utils import PdfReadError
+from PyPDF2 import PdfFileReader, utils
 from io import BytesIO
 import datetime
 import numpy as np
@@ -11,9 +10,10 @@ import numpy as np
 macro_fields = {
     'Elliptic PDE':['35J05', '35J10', '35J15', '35J20', '35J25', '35J30', '35J35', '35J40', '35J45', '35J50', '35J55', '35J60', '35J65', '35J67', '35J70', '35J85'],
     'Fourier Analysis':['42A05', '42A10', '42A15', '42A16', '42A20', '42A24', '42A32', '42A38', '42A45', '42A50', '42A55', '42A61', '42A63', '42A65', '42A70', '42A75', '42A82', '42A85', '42B05', '42B08', '42B10', '42B15', '42B20', '42B25', '42B30', '42B35', '42C10', '42C15', '42C20', '42C25', '42C30', '42C40'],
-    'Abstract Fourier analysis':['43A05', '43A07', '43A10', '43A15', '43A17', '43A20', '43A22', '43A25', '43A30', '43A32', '43A35', '43A40', '43A45', '43A46', '43A50', '43A55', '43A60', '43A62', '43A65', '43A70', '43A75', '43A77', '43A80', '43A85', '43A90'],
+    'Abstract Fourier Analysis':['43A05', '43A07', '43A10', '43A15', '43A17', '43A20', '43A22', '43A25', '43A30', '43A32', '43A35', '43A40', '43A45', '43A46', '43A50', '43A55', '43A60', '43A62', '43A65', '43A70', '43A75', '43A77', '43A80', '43A85', '43A90'],
     'Fluid Mechanics PDE': ['76A02','76A05','76A10','76A15','76A20','76A25','76A99','76B03','76B07','76B10','76B15','76B20','76B25','76B45','76B47','76B55','76B60','76B65','76B70','76D03','76D05','76D06','76D07','76D08','76D09','76D10','76D17','76D25','76D27','76D33','76D45','76D50','76D55','76E05','76E06','76E07','76E09','76E15','76E17','76E19','76E20','76E25','76E30','76E99','76Fxx','76F02','76F05','76F06','76F10','76F20','76F25','76F30','76F35','76F40','76F45','76F50','76F55','76F60','76F65','76F70','76F99','76G25]','76H05','76J20','76K05','76L05','76M10','76M12','76M15','76M20','76M22','76M23','76M25','76M27','76M28','76M30','76M35','76M40','76M45','76M50','76M55','76M60','76N10','76N15','76N17','76N20','76N25','76N99','76P05','76Q05','76Rxx','76R05','76R10','76R50', '76S05']
 }
+
 
 
 
@@ -179,7 +179,7 @@ def pages_from_url(record, i):
             memoryFile = BytesIO(content)
             pdfFile = PdfFileReader(memoryFile)
             return pdfFile.getNumPages()
-        except PdfReadError:
+        except utils.PdfReadError:
             return None
         except urllib.error.HTTPError:
             return None
@@ -214,4 +214,4 @@ are added.
 def get_details(macro_field):
     year = datetime.datetime.now().year
     month = datetime.datetime.now().month
-    return re.sub(" ", "_", macro_field) + '__' + str(year) + '/' + str(month)
+    return re.sub(" ", "_", macro_field) + '__' + str(year) + '-' + str(month)
