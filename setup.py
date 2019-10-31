@@ -18,18 +18,19 @@ except ImportError:
 
 setup(
     name = "Arxivtrends",
-    version = "0.0.1",
+    version = "0.0.2",
     description = "An ArXiV scraper to retrieve records from given research areas in mathematics and detect some trends in hyper-specialization and growth rate increase of scientific production in those fields.",
     author = "Alessandro Marinelli",
     author_email = "alessandromarinelli7@gmail.com",
     url = "https://github.com/amarine7/Arxivtrends",
     #download_url = "",
     py_modules = [""],
-    packages=find_packages(),
+    packages=['arxivtrends'],
+    include_package_data = True,
     keywords = ["hyper-specialization", "scraper", "api", "arXiv"],
     license = "MIT",
     classifiers = ["Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-        "Development Status :: 1 - Production/Stable",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research"],
 )
